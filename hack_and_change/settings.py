@@ -27,6 +27,13 @@ SECRET_KEY = 'i6^64@r!@8^@9hki5^0dqloou)u12b%07ool&=0!47rv@2ynb&'
 
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '172.20.12.155', 'hackchange.pythonanywhere.com']
 
+####################################
+# Internationalization
+####################################
+
+USE_TZ = True
+LANGUAGE_CODE = 'ru-RU'
+TIME_ZONE = 'Europe/Moscow'
 
 # Application definition
 
@@ -37,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
+
     'microservices'
 ]
 
@@ -96,7 +105,7 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication'

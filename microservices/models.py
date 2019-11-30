@@ -3,6 +3,8 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
+from microservices.exceptions import IncorrectArgument, NoSuchId
+
 
 class Author(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True,
@@ -20,6 +22,32 @@ class Author(models.Model):
         verbose_name = "Ответственный"
         verbose_name_plural = "Ответственные"
 
+    @staticmethod
+    def get_by_id(_id):
+        try:
+            _id = int(_id)
+        except Exception:
+            raise IncorrectArgument()
+        try:
+            return Author.objects.get(id=_id)
+        except Author.DoesNotExist:
+            raise NoSuchId()
+
+
+class Company(models.Model):
+    title = models.CharField(max_length=255, blank=True, null=True, verbose_name="Название компании")
+
+    @staticmethod
+    def get_by_id(_id):
+        try:
+            _id = int(_id)
+        except Exception:
+            raise IncorrectArgument()
+        try:
+            return Company.objects.get(id=_id)
+        except Company.DoesNotExist:
+            raise NoSuchId()
+
 
 class Microservice(TimeStampedModel):
     IDEA = 'idea'
@@ -28,19 +56,25 @@ class Microservice(TimeStampedModel):
     TEST = 'text'
     REVISION = 'revision'
     SUPPORT = 'support'
+    CLOSED = 'closed'
     STATUS = Choices(
         (IDEA, "Идея"), (DESIGN, "Проектирование"), (DEV, "Разработка"), (TEST, "Тестирование"),
-        (REVISION, "В доработке"), (SUPPORT, "Поддержка")
+        (REVISION, "В доработке"), (SUPPORT, "Поддержка"), (CLOSED, "Закрыто")
     )
 
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Название микросервиса")
     description = models.TextField(blank=True, null=True, verbose_name="Описание микросервиса")
-    author = models.ForeignKey(Author, blank=False, null=False, verbose_name="Ответственный за микросервис",
-                               on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        Author, blank=False, null=False, verbose_name="Ответственный за микросервис", on_delete=models.CASCADE
+    )
     status = models.CharField(choices=STATUS, default=DEV, max_length=32, verbose_name="Статус микросервиса")
     external_id = models.IntegerField(blank=False, null=False, verbose_name="ID микросервиса", unique=True)
-    start_date = models.DateTimeField(null=True, blank=True, verbose_name="Время начала работы над микросервисом")
-    end_date = models.DateTimeField(null=True, blank=True, verbose_name="Время завершения работы над микросервисом")
+    start_date = models.DateField(null=True, blank=True, verbose_name="Время начала работы над микросервисом")
+    end_date = models.DateField(null=True, blank=True, verbose_name="Время завершения работы над микросервисом")
+    company = models.ForeignKey(
+        Company, blank=True, null=True,
+        verbose_name="Компания, в которой разрабатывается микросервис", on_delete=models.CASCADE
+    )
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
 
@@ -50,6 +84,17 @@ class Microservice(TimeStampedModel):
     class Meta:
         verbose_name = "Микросервис"
         verbose_name_plural = "Микросервисы"
+
+    @staticmethod
+    def get_by_id(_id):
+        try:
+            _id = int(_id)
+        except Exception:
+            raise IncorrectArgument()
+        try:
+            return Microservice.objects.get(id=_id)
+        except Microservice.DoesNotExist:
+            raise NoSuchId()
 
 
 class Tag(models.Model):
@@ -73,3 +118,8 @@ class Pair(TimeStampedModel):
         verbose_name="Второй микросервис в паре", on_delete=models.CASCADE
     )
     connection = models.CharField(choices=STATUS, default=A_TO_B, max_length=32, verbose_name="Направление связи")
+
+    class Meta:
+        verbose_name = "Пара"
+        verbose_name_plural = "Пары"
+        unique_together = ('first_microservice', 'second_microservice')
