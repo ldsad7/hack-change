@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'i6^64@r!@8^@9hki5^0dqloou)u12b%07ool&=0!47rv@2ynb&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '172.20.12.155']
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '172.20.12.155', 'hackchange.pythonanywhere.com']
 
 
 # Application definition
@@ -82,11 +82,11 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysql',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': 3306
+        'NAME': 'hackchange$mysql',
+        'USER': 'hackchange',
+        'PASSWORD': 'new_password',
+        'HOST': 'hackchange.mysql.pythonanywhere-services.com',
+        # 'PORT': 3306
     }
 }
 
@@ -143,3 +143,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
