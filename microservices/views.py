@@ -41,13 +41,13 @@ def draw_graph_and_save_to_file():
 
     # draw_graph_and_save_to_file()
     web = Web(adjacency=adjacency, display=display, title="All microservices")
-    web.save(webweb_file)
+    return web.html
 
 
 def index(request):
-    draw_graph_and_save_to_file()
-    with open(webweb_file, 'r', encoding='utf-8') as f:
-        html_code = f.read()
+    html_code = draw_graph_and_save_to_file()
+    # with open(webweb_file, 'r', encoding='utf-8') as f:
+    #     html_code = f.read()
     # styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
     # scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
     context = {'html_code': html_code}
