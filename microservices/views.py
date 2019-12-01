@@ -48,9 +48,9 @@ def index(request):
     draw_graph_and_save_to_file()
     with open(webweb_file, 'r', encoding='utf-8') as f:
         html_code = f.read()
-    styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
-    scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
-    context = {'styles': styles, 'scripts': scripts}
+    # styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
+    # scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
+    context = {'html_code': html_code}
     return render(request, 'microservices/index.html', context)
 
 
