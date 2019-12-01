@@ -1,1 +1,1 @@
-[]
+[['N Solver', 'K Solver'], ['N Solver', 'M Solver'], ['F Solver', 'M Solver'], ['T Solver', 'N Solver'], ['T Solver', 'M Solver']]

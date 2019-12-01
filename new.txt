@@ -1,0 +1,9 @@
+663c663
+<                     <script type="text/javascript">var wwdata = {"display": {"attachWebwebToElementWithId": null, "charge": 2500, "colorBy": "degree", "colorPalette": "Set1", "height": 500, "linkLength": 200, "linkStrength": 0.75, "radius": 10, "scaleLinkWidth": true, "showNodeNames": true, "sizeBy": "weightedDegree", "width": 1400}, "networks": {"All microservices": {"layers": [{"edgeList": [["New Name!!!", "What is the name?"], ["What is the name?", "New Name!!!"]], "nodes": {}, "metadata": null}]}}, "title": "All microservices"};</script>
+---
+>                     <script type="text/javascript">var wwdata = {"display": {"attachWebwebToElementWithId": null, "charge": 2500, "colorBy": "degree", "colorPalette": "Set1", "height": 500, "linkLength": 200, "linkStrength": 0.75, "radius": 10, "scaleLinkWidth": true, "showNodeNames": true, "sizeBy": "weightedDegree", "width": 1400}, "networks": {}, "title": "All microservices"};</script>
+2847c2847
+<         
+\ No newline at end of file
+---
+>         

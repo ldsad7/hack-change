@@ -1,9 +1,7 @@
-import json
 import re
 
 from django.db.models import Count, Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
@@ -46,16 +44,30 @@ def draw_graph_and_save_to_file():
     return web.html, adjacency
 
 
-def index(request):
+def index(request, microservices=None):
     html_code, adjacency = draw_graph_and_save_to_file()
     html_code = re.sub(
         '"networks": {}',
         f'"networks": {{"All microservices": {{"layers": [{{"edgeList": {adjacency}, "nodes": {{}}, "metadata": null}}]}}}}',
         html_code
     )
-    # styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
-    # scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
-    context = {'html_code': html_code}
+    html_code = re.sub('#webweb-center {(.*?)}', r'#webweb-center {\1 \n margin-top: 1150px; display:inline-block;}',
+                       html_code, flags=re.DOTALL)
+    styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
+    # styles += """#webweb-menu-right {display: grid;}\n#webweb-menu-left {display: grid;}"""
+    scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
+    # context = {'html_code': html_code}
+    if microservices is None:
+        microservices = MicroserviceReadSerializer(Microservice.objects.all().order_by('-modified')[:10],
+                                                   many=True).data
+    context = {
+        'styles': styles,
+        'scripts': scripts,
+        'authors': AuthorReadSerializer(Author.objects.all(), many=True).data,
+        'statuses': [{'key': status[0], 'display_name': status[1]} for status in Microservice.STATUS],
+        'companies': CompanyReadSerializer(Company.objects.all(), many=True).data,
+        'microservices': microservices
+    }
     return render(request, 'microservices/index.html', context)
 
 

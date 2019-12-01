@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'django_filters',
 
     'microservices'
 ]
@@ -152,4 +153,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/home/hackchange/hack-change/static"
+# <<<<<<< HEAD
+# STATIC_ROOT = "/home/hackchange/hack-change/static"
+# =======
+STATIC_ROOT = ''  # os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = (os.path.join('static'),)
+# >>>>>>> dd61740820e5fb8c51c10666db3c2d51423c2913
