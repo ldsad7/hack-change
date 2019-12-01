@@ -41,13 +41,20 @@ def draw_graph_and_save_to_file():
 
     # draw_graph_and_save_to_file()
     web = Web(adjacency=adjacency, display=display, title="All microservices")
-    return web.html
+    return web.html, adjacency
 
 
 def index(request):
-    html_code = draw_graph_and_save_to_file()
-    # with open(webweb_file, 'r', encoding='utf-8') as f:
-    #     html_code = f.read()
+    html_code, adjacency = draw_graph_and_save_to_file()
+    with open('webweb_representation_.html', 'r', encoding='utf-8') as f:
+        html_code = f.read()
+    html_code = re.sub(
+        '"networks": {}',
+        f'"networks": {{"All microservices": {{"layers": [{{"edgeList": {adjacency}, "nodes": {{}}, "metadata": null}}]}}}}',
+        html_code
+    )
+    with open('webweb_representation__.html', 'w', encoding='utf-8') as f:
+        f.write(html_code)
     # styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
     # scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
     context = {'html_code': html_code}
