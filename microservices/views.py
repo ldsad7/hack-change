@@ -39,6 +39,8 @@ def draw_graph_and_save_to_file():
         'width': 1400,
     }
 
+    with open('tmp.txt', 'w', encoding='utf-8') as f:
+        f.write(str(adjacency))
     # draw_graph_and_save_to_file()
     web = Web(adjacency=adjacency, display=display, title="All microservices")
     return web.html, adjacency
