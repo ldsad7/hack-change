@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MicroBase</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="line"></div>
+    <div class="horisont"></div>
+    <header>
+    </header>
+    <div class="menu">
+        <div class="name_">
+            MicroBase
+        </div>
+        <div class="profile">
+            <img src="img/profile_photo.png" alt="" class="photo">
+            <h1 class="name">Мария Абрамова</h1>
+            <h2 class="mail">abramova@gmail.com</h2>
+        </div>
+        <div class="my_services">
+            <img src="img/dashboard.png" alt="" class="icon_my_services">
+            <p class="name_my_services">Мои сервисы</p>
+        </div>
+        <div class="chat">
+            <img src="img/chat.png" alt="" class="icon_chat">
+            <p class="name_chat">Сообщения</p>
+        </div>
+        <div class="horisont1"></div>
+        <div class="settings">
+            <img src="img/settings.png" alt="" class="icon_settings">
+            <p class="name_settings">Настройки</p>
+        </div>
+        <a class="button" href="add_microservice">
+            <p class="text_button">Добавить микросервис</p>
+        </a>
+    </div>
+    <div class="base">
+        <div class="search">
+            <form method="get" action="api/v1/microservices">
+                <div class="results">
+                    <img src="img/search.png" alt="" class="icon_search">
+                    <input type="text" onchange="alert(this.value)" placeholder="Название, функция или описание микросервиса" class="text_search">
+
+                    <div class="search_request" id="001">
+                        <!--
+                    <a class="request1" id="1" href="#">
+                        <p class="request_text">python</p>
+                    </a>
+                    <a class="request2" id="2" href="#">
+                        <p class="request_text">android</p>
+                    </a>
+                    <a class="request3" id="3" href="#">
+                        <p class="request_text">php</p>
+                    </a>
+                    <a class="request4" id="4" href="#">
+                        <p class="request_text">c++</p>
+                    </a>
+-->
+                        <!--
+                    <a class="request5" id="5" href="#">
+                        <p class="request_text">чат</p>
+                    </a>
+-->
+                        <!--
+                    <a class="request6" id="6" href="#">
+                        <p class="request_text">доставка</p>
+                    </a>
+                    <a class="request7" id="7" href="#">
+                        <p class="request_text">оформление заказа</p>
+                    </a>
+                    <a class="request8" id="8" href="#">
+                        <p class="request_text">обратная связь</p>
+                    </a>
+-->
+                    </div>
+                    <div class="complex">
+                        <p>
+                            {% for author in authors %}
+                            <label for="author">{{ author.fisrt_name }} {{ author.last_name }}</label>
+                            <input type="checkbox" name="author" id="author">
+                            {% endfor %}
+
+                        </p>
+                        <p>Статус:
+                            {% for status in statuses %}
+                            <label for="status" value={{ status.key }}>{{ status.display_name }}</label>
+                            {% endfor %}
+                        </p>
+                        <p>Дата начала работы над микросервисом не раньше:
+                            <input type="date" name="start_date_gte">
+                        </p>
+                        <p>Дата окончания работы над микросервисом не позже:
+                            <input type="date" name="end_date_lte">
+                        </p>
+                        <p>Компания:
+                            {% for company in companies %}
+                            <label for="company" value={{ company.id }}>{{ company.title }}</label>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            <label for="is_active">Активный проект:</label>
+                            <input type="hidden" id="is_active" value="false" checked>
+                            <input type="checkbox" id="is_active" value="true">
+                        </p>
+                        <p>
+                            <label for="is_deleted">Завершенный проект:</label>
+                            <input type="hidden" id="is_deleted" value="false" checked>
+                            <input type="checkbox" id="is_deleted" value="true">
+                        </p>
+                        <input type="submit" value="Submit">
+                        {% csrf_token %}
+                        <h1 class="last_update">Последние обновления</h1>
+<!--
+                        <h1 class="filter">Фильтр</h1>
+                        <img src="img/filter.png" alt="" class="filter_img">
+-->
+                    </div>
+                </div>
+            </form>
+            
+            <div class="names_headers">
+                <h1 class="head1">Название</h1>
+                <h1 class="head2">Ответственное лицо</h1>
+                <h1 class="head3">Дата обновления</h1>
+                <h1 class="head4">Компания</h1>
+                <h1 class="head5">Статус</h1>
+            </div>
+
+            <div class="card">
+                <h1 class="micro_name">Обратная связь</h1>
+                <img src="img/dev_photo.png" alt="" class="dev_photo">
+                <h1 class="dev_name">Георгий Потапов</h1>
+                <h1 class="dev_date">30.11.2019</h1>
+                <h1 class="dev_company">Перекрёсток</h1>
+                <div class="status">
+                    <p class="text_status">в поддержке</p>
+                </div>
+                <div class="new_line"></div>
+                <h1 class="description">Описание</h1>
+                <h1 class="descr_tags">Теги</h1>
+                <p class="full_descr">Предоставление клиенту возможности получить обратный звонок. Для этого просим указать Имя, Город, Электронную почту и Номер телефона</p>
+                <a class="request10" href="#">
+                    <p class="request_text">связь</p>
+                </a>
+                <a class="request11" href="#">
+                    <p class="request_text">контакты</p>
+                </a>
+                <a class="request12" href="#">
+                    <p class="request_text">база клиентов</p>
+                </a>
+            </div>
+            <div class="card2">
+                <h1 class="micro_name">Обратная связь</h1>
+                <img src="img/dev_photo.png" alt="" class="dev_photo">
+                <h1 class="dev_name">Георгий Потапов</h1>
+                <h1 class="dev_date">30.11.2019</h1>
+                <h1 class="dev_company">Перекрёсток</h1>
+                <div class="status">
+                    <p class="text_status">в поддержке</p>
+                </div>
+                <div class="new_line"></div>
+                <h1 class="description">Описание</h1>
+                <h1 class="descr_tags">Теги</h1>
+                <p class="full_descr">Предоставление клиенту возможности получить обратный звонок. Для этого просим указать Имя, Город, Электронную почту и Номер телефона</p>
+                <a class="request10" href="#">
+                    <p class="request_text">связь</p>
+                </a>
+                <a class="request11" href="#">
+                    <p class="request_text">контакты</p>
+                </a>
+                <a class="request12" href="#">
+                    <p class="request_text">база клиентов</p>
+                </a>
+            </div>
+            <div class="card3">
+                <h1 class="micro_name">Обратная связь</h1>
+                <img src="img/dev_photo.png" alt="" class="dev_photo">
+                <h1 class="dev_name">Георгий Потапов</h1>
+                <h1 class="dev_date">30.11.2019</h1>
+                <h1 class="dev_company">Перекрёсток</h1>
+                <div class="status">
+                    <p class="text_status">в поддержке</p>
+                </div>
+                <div class="new_line"></div>
+                <h1 class="description">Описание</h1>
+                <h1 class="descr_tags">Теги</h1>
+                <p class="full_descr">Предоставление клиенту возможности получить обратный звонок. Для этого просим указать Имя, Город, Электронную почту и Номер телефона</p>
+                <a class="request10" href="#">
+                    <p class="request_text">связь</p>
+                </a>
+                <a class="request11" href="#">
+                    <p class="request_text">контакты</p>
+                </a>
+                <a class="request12" href="#">
+                    <p class="request_text">база клиентов</p>
+                </a>
+            </div>
+            <div class="card4">
+                <h1 class="micro_name">Обратная связь</h1>
+                <img src="img/dev_photo.png" alt="" class="dev_photo">
+                <h1 class="dev_name">Георгий Потапов</h1>
+                <h1 class="dev_date">30.11.2019</h1>
+                <h1 class="dev_company">Перекрёсток</h1>
+                <div class="status">
+                    <p class="text_status">в поддержке</p>
+                </div>
+                <div class="new_line"></div>
+                <h1 class="description">Описание</h1>
+                <h1 class="descr_tags">Теги</h1>
+                <p class="full_descr">Предоставление клиенту возможности получить обратный звонок. Для этого просим указать Имя, Город, Электронную почту и Номер телефона</p>
+                <a class="request10" href="#">
+                    <p class="request_text">связь</p>
+                </a>
+                <a class="request11" href="#">
+                    <p class="request_text">контакты</p>
+                </a>
+                <a class="request12" href="#">
+                    <p class="request_text">база клиентов</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+    </footer>
+</body>
+<script>
+    var request = new XMLHttpRequest()
+    request.open('GET', 'http://hackchange.pythonanywhere.com/api/v1/tags/', true);
+    request.onload = function() {
+        var data = JSON.parse(this.response)
+        //alert(JSON.stringify(data.results))
+        if (request.status >= 200 && request.status < 400) {
+            var i = 1;
+            data.results.forEach(tag => {
+                const a = document.createElement('a')
+                const p = document.createElement('p')
+                p.textContent = tag.title
+                a.appendChild(p)
+                a.classList.add('request' + String(i))
+                p.classList.add('request_text')
+                i += 1
+                document.getElementById('001').appendChild(a)
+            })
+        }
+    }
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.send()
+
+</script>
+
+</html>
