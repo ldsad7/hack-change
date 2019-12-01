@@ -16,7 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from microservices import views
+
 urlpatterns = [
+    path('', views.index, name='index'),
+    path('add_microservice/', views.add_microservice, name='add_microservice'),
+    path('redirect_to_main/', views.redirect_to_main, name='redirect_to_main'),
     path('admin/', admin.site.urls),
     path('api/v1/', include('microservices.urls')),
 ]

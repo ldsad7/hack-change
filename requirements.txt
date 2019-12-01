@@ -8,3 +8,5 @@ PyMySQL==0.9.3
 djangorestframework==3.10.3
 django-cors-headers==3.0.2
 django-filter==2.1.0
+webweb==0.0.37
+requests==2.22.0
