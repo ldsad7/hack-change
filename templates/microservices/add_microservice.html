@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/redirect_to_main/">
+    <p>
+        <label for="name">Название микросервиса:</label>
+        <input id="name" type="text" placeholder="name" autocomplete="off" required>
+    </p>
+    <p>
+        <label for="description">Описание:</label>
+        <textarea id="description" cols="40" rows="5" placeholder="description" autocomplete="off" required></textarea>
+    </p>
+    <p>
+        <label for="author">Автор:</label>
+        <select name="author">
+            {% for author in authors %}
+                <option value={{ author.id }}>{{ author.fisrt_name }} {{ author.last_name }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>Статус:
+        <select name="status">
+            {% for status in statuses %}
+                <option value={{ status.key }}>{{ status.display_name }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>Внешний ID:
+        <input type="number" name="external_id" required>
+    </p>
+    <p>Дата начала работы над микросервисом:
+        <input type="date" name="start_date" required>
+    </p>
+    <p>Дата окончания работы над микросервисом:
+        <input type="date" name="end_date" required>
+    </p>
+    <p>Компания:
+        <select name="company">
+            {% for company in companies %}
+                <option value={{ company.id }}>{{ company.title }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="is_active">Активный проект:</label>
+        <input type="hidden" id="is_active" value="false" checked>
+        <input type="checkbox" id="is_active" value="true">
+    </p>
+    <p>
+        <label for="is_deleted">Завершенный проект:</label>
+        <input type="hidden" id="is_deleted" value="false" checked>
+        <input type="checkbox" id="is_deleted" value="true">
+    </p>
+    <input type="submit" value="Submit">
+    {% csrf_token %}
+</form>
+</body>
+</html>

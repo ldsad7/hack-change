@@ -1,15 +1,75 @@
+import json
+import re
+
 from django.db.models import Count, Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from webweb import Web
 
 from microservices.filters import MicroserviceFilter
 from microservices.models import Microservice, Author, Tag, Company, Pair
 from microservices.serializers import MicroserviceSerializer, AuthorSerializer, TagSerializer, CompanySerializer, \
-    MicroserviceReadSerializer, PairSerializer, PairReadSerializer
+    MicroserviceReadSerializer, PairSerializer, AuthorReadSerializer, CompanyReadSerializer
+
+webweb_file = 'webweb_representation.html'
+
+
+def draw_graph_and_save_to_file():
+    pairs = Pair.objects.all().distinct()
+    adjacency = [[pair.first_microservice.name, pair.second_microservice.name] for pair in pairs]
+
+    display = {
+        'attachWebwebToElementWithId': None,
+        'charge': 2500,
+        'colorBy': 'degree',
+        'colorPalette': 'Set1',
+        'height': 500,
+        'linkLength': 200,
+        'linkStrength': 0.75,
+        'radius': 10,
+        'scaleLinkWidth': True,
+        'showNodeNames': True,
+        'sizeBy': 'weightedDegree',
+        'width': 1400,
+    }
+
+    # draw_graph_and_save_to_file()
+    web = Web(adjacency=adjacency, display=display, title="All microservices")
+    web.save(webweb_file)
+
+
+def index(request):
+    draw_graph_and_save_to_file()
+    with open(webweb_file, 'r', encoding='utf-8') as f:
+        html_code = f.read()
+    styles = '\n'.join(re.findall('<style>(.*?)</style>', html_code, re.DOTALL))
+    scripts = '\n'.join(re.findall('<script.*?</script>', html_code, re.DOTALL))
+    context = {'styles': styles, 'scripts': scripts}
+    return render(request, 'microservices/index.html', context)
+
+
+def add_microservice(request):
+    context = {
+        'authors': AuthorReadSerializer(Author.objects.all(), many=True).data,
+        'statuses': [{'key': status[0], 'display_name': status[1]} for status in Microservice.STATUS],
+        'companies': CompanyReadSerializer(Company.objects.all(), many=True).data
+    }
+    return render(request, 'microservices/add_microservice.html', context)
+
+
+def redirect_to_main(request):
+    body_unicode = request.body.decode('utf-8')
+    dct = {pair.split('=')[0]: pair.split('=')[1] for pair in body_unicode.split('&')[:-1]}
+    dct['author'] = Author.get_by_id(int(float(dct['author'])))
+    dct['company'] = Company.get_by_id(int(float(dct['company'])))
+    Microservice.objects.create(**dct)
+    return index(request)
 
 
 class MicroserviceViewSet(ModelViewSet):
@@ -75,9 +135,12 @@ class PairViewSet(ModelViewSet):
         pairs = Pair.objects.filter(
             Q(first_microservice=microservice_obj) | Q(second_microservice=microservice_obj)
         ).distinct()
-        return Response({'main_node': microservice_obj.name, 'pairs': [[pair.first_microservice.name, pair.second_microservice.name] for pair in pairs]}, status=status.HTTP_200_OK)
+        return Response({'main_node': microservice_obj.name,
+                         'pairs': [[pair.first_microservice.name, pair.second_microservice.name] for pair in pairs]},
+                        status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
     def all_connections(self, request, pk=None):
         pairs = Pair.objects.all().distinct()
-        return Response([[pair.first_microservice.name, pair.second_microservice.name] for pair in pairs], status=status.HTTP_200_OK)
+        return Response([[pair.first_microservice.name, pair.second_microservice.name] for pair in pairs],
+                        status=status.HTTP_200_OK)
